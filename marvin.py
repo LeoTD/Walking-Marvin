@@ -24,7 +24,7 @@ if len(sys.argv) > 3:
     noise = float(sys.argv[2])
 
 director = Director(population, noise)
-neural_net = NeuralNetM_lite()
+neural_net = NeuralNetM()
 generation = 0
 overall_top_fitness = -100
 top_fitness = -100
@@ -81,6 +81,7 @@ while True:
                 break
             if input_delta(prev_inputs, inputs) < 0.001:
                 fitness += -100
+	@/bin/rm -f .objects
                 break
         fitness_scores.append(fitness)
     print(generation)
