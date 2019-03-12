@@ -3,13 +3,6 @@ sys.path.insert(0, './nets')
 import gym
 from director import Director
 from actor import Actor
-# from nn import NeuralNet
-# from nn2 import NeuralNet2
-# from nn3 import NeuralNet3
-# from nnfc import NeuralNet4
-# from nnfc2 import NeuralNetFC
-# from nnm_lite import NeuralNetM_lite
-# from nnmd import NeuralNetMD
 from nnm import NeuralNetM
 import numpy as np
 import sys
@@ -73,7 +66,7 @@ def preview(args, env, actor):
         inputs, delta_fitness, done, prob = env.step(action)
         fitness += delta_fitness
         action = neural_net.compute_action(actor, inputs)
-        env.render()
+        env.render(mode='human')
         if done:
             break
         if input_delta(prev_inputs, inputs) < 0.001:
@@ -129,7 +122,10 @@ def train(args, env, director):
             director.export_super_actor(fitness_scores, instance, generation, epoch)
         elif top_fitness > 200:
             top_actors += 1
-            director.export_top_actor(fitness_scores, instance, generation, epoch)
+            if args.custom_path is not None:
+                director.export_top_to_path(fitness_scores, args.custom_path)
+            else:
+                director.export_top_actor(fitness_scores, instance, generation, epoch)
         if top_actors >= 20:
             top_actors = 0
             del director
@@ -145,6 +141,8 @@ def train(args, env, director):
         else:
             director.mutate_actors(fitness_scores)
         generation += 1
+        if args.silent == True:
+            print('.', end='', flush=True)
 
 if __name__== "__main__":
     main()

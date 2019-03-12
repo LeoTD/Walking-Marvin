@@ -31,6 +31,8 @@ class Director:
         self.pop = pop
         self.noise = noise
         self.survive = pop // 10
+        if self.survive == 0:
+            self.survive = 1
         self.random = pop // 20
         for i in range(pop):
             self.actors.append(Actor())
@@ -59,6 +61,13 @@ class Director:
             st = str(instance) + "/" + str(epoch) + "/" + str(st) + str(generation)
         self.make_path("super", instance, epoch)
         with open("./super_actors/" + st + ".pkl", 'wb') as output:
+            pickle.dump(top_actor, output, pickle.HIGHEST_PROTOCOL)
+
+    def export_top_to_path(self, fitness_scores, path):
+        st = datetime.datetime.fromtimestamp(time.time()).strftime('%m-%d_%H:%M_')
+        top_actor = self.actors[np.argsort(fitness_scores)[-1:][0]]
+        os.system("mkdir -p " + path)
+        with open(path + "/" + st + ".pkl", 'wb') as output:
             pickle.dump(top_actor, output, pickle.HIGHEST_PROTOCOL)
 
     def import_actor(self, filename):

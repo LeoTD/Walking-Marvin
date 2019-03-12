@@ -1,8 +1,7 @@
 import argparse
 
 def get_args():
-	"""
-	Get command line arguments with argparse.
+	"""Get command line arguments with argparse.
 	"""
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--mode', choices=['t', 'p'], required=True,
@@ -21,8 +20,8 @@ def get_args():
 						help='Set survivors value for training mode.')
 	parser.add_argument('--rand', type=int, dest='random',
 						help='Set the number of random actors for training mode.')
+	parser.add_argument('--path', dest='custom_path',
+						help='Set a custom save path for top actors. (eg. "./top_actors_directory")')
 
 	args = parser.parse_args()
 	return args
-
-print(get_args())
