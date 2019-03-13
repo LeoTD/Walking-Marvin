@@ -16,22 +16,27 @@ class NeuralNetM:
         return self.fc_net(W[0:624], B[0:624], Hull_data + tuple(inputs[4:8]) + tuple(inputs[9:13]), Li_data, inputs[8], inputs[13])
 
     def fc_net(self, W, B, S, Li, Lc1, Lc2):
+
         fc_f1 = self.fc_layer(W[0:144], B[0:144], S, 12, self.relu)
         fc_f1 = self.fc_layer(W[144:240], B[144:240], fc_f1, 8, self.relu)
         fc_f1 = self.fc_layer(W[240:295], B[240:295], fc_f1 + list(Li), 5, self.relu)
         fc_f1 = self.fc_layer(W[295:305], B[295:305], fc_f1, 2, None)
+        
         fc_f2 = self.fc_layer(W[0:144], B[0:144], tuple(S[0:4]) + tuple(S[8:12]) + tuple(S[4:8]), 12, self.relu)
         fc_f2 = self.fc_layer(W[144:240], B[144:240], fc_f2, 8, self.relu)
         fc_f2 = self.fc_layer(W[240:295], B[240:295], fc_f2 + list(Li), 5, self.relu)
         fc_f2 = self.fc_layer(W[295:305], B[295:305], fc_f2, 2, None)
+        
         fc_b1 = self.fc_layer(W[305:449], B[305:449], S, 12, self.relu)
         fc_b1 = self.fc_layer(W[449:545], B[449:545], fc_b1, 8, self.relu)
         fc_b1 = self.fc_layer(W[545:600], B[545:600], fc_b1 + list(Li), 5, self.relu)
         fc_b1 = self.fc_layer(W[600:620], B[600:620], fc_b1, 2, None)
+        
         fc_b2 = self.fc_layer(W[305:449], B[305:449], tuple(S[0:4]) + tuple(S[8:12]) + tuple(S[4:8]), 12, self.relu)
         fc_b2 = self.fc_layer(W[449:545], B[449:545], fc_b2, 8, self.relu)
         fc_b2 = self.fc_layer(W[545:600], B[545:600], fc_b2 + list(Li), 5, self.relu)
         fc_b2 = self.fc_layer(W[600:620], B[600:620], fc_b2, 2, None)
+
         if Lc2 == 1:
             D1, D2 = self.leg_contact(W[620:622], B[620:622], fc_f1, Lc1)
         else:
