@@ -106,17 +106,14 @@ def train(args, env, director):
                     fitness += -100
                     break
             fitness_scores.append(fitness)
-        if args.silent == False:
-            print(generation)
-            print(['%.f' % elem for elem in sorted(fitness_scores, reverse=True)])
         top_fitness = np.amax(fitness_scores)
         if top_fitness > overall_top_fitness:
             overall_top_fitness = top_fitness
         if args.silent == False:
-            print(overall_top_fitness)
-            print(top_fitness)
             print(generation)
-
+            print(['%.f' % elem for elem in sorted(fitness_scores, reverse=True)])
+            print("         Overall top actor = %d" % overall_top_fitness)
+            print("This generations top actor = %d" % top_fitness)
         if top_fitness > 300:
             top_actors = -10
             director.export_super_actor(fitness_scores, instance, generation, epoch)
@@ -131,7 +128,7 @@ def train(args, env, director):
             del director
             director = get_director(args)
             epoch += 1
-        elif generation > 300 or (generation > 100 and overall_top_fitness < 0):
+        elif generation > 500 or (generation > 100 and overall_top_fitness < 0):
             generation = 0
             del director
             director = get_director(args)
